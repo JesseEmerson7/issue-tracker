@@ -1,5 +1,5 @@
 package edu.seminolestate.tickets.controller;
-import edu.seminolestate.tickets.service.TicketService; import jakarta.validation.constraints.*; import org.slf4j.*; import org.springframework.http.*; import org.springframework.stereotype.Controller; import org.springframework.ui.Model; import org.springframework.web.bind.annotation.*; import org.springframework.validation.annotation.Validated;
+import edu.seminolestate.tickets.service.TicketService; import jakarta.validation.constraints.*; import org.slf4j.*; import org.springframework.http.*; import org.springframework.stereotype.Controller; import org.springframework.ui.Model; import org.springframework.web.bind.*; import org.springframework.web.bind.annotation.*; import org.springframework.validation.annotation.Validated;
 import java.util.NoSuchElementException;
 @Controller
 @Validated
@@ -13,6 +13,6 @@ public class TicketController {
  @PostMapping("/tickets/{id}/status") public String status(@PathVariable long id,@RequestParam String token,@RequestParam String status){service.changeStatus(id,token,status);return "redirect:/tickets/"+id+"?token="+token;}
  @ExceptionHandler(NoSuchElementException.class) @ResponseStatus(HttpStatus.NOT_FOUND) @ResponseBody public String notFound(){return "Ticket not found";}
  @ExceptionHandler(SecurityException.class) @ResponseStatus(HttpStatus.FORBIDDEN) @ResponseBody public String forbidden(){return "Ticket access denied";}
- @ExceptionHandler({IllegalArgumentException.class,org.springframework.web.bind.MethodArgumentNotValidException.class,org.springframework.web.method.annotation.HandlerMethodValidationException.class,jakarta.validation.ConstraintViolationException.class}) @ResponseStatus(HttpStatus.BAD_REQUEST) @ResponseBody public String badRequest(){return "Invalid request";}
+ @ExceptionHandler({IllegalArgumentException.class,org.springframework.web.bind.MethodArgumentNotValidException.class,org.springframework.web.method.annotation.HandlerMethodValidationException.class,MissingServletRequestParameterException.class,jakarta.validation.ConstraintViolationException.class}) @ResponseStatus(HttpStatus.BAD_REQUEST) @ResponseBody public String badRequest(){return "Invalid request";}
  @ExceptionHandler(Exception.class) @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) @ResponseBody public String error(Exception ex){log.error("Unhandled application error",ex);return "An unexpected error occurred";}
 }
